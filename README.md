@@ -91,6 +91,6 @@ var listener = app.listen(port, 'localhost', function() {
 ---
 
 #### License
-MIT License. [Click here for more information.](LICENSE.md)
+MIT License. [Click here for more information.](LICENSE)
 
 ---
