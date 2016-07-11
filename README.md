@@ -5,7 +5,7 @@ The proxy listens on port 80 and, depending on the domain provided,
 redirects the user to a specific port, where one Node app is listening.
 
 ### Usage
-* Install `nginx` on your server (example using apt):
+* Install `nginx` on your server (examples using apt):
 
 ```
   sudo apt-get install nginx
@@ -83,8 +83,10 @@ var listener = app.listen(port, 'localhost', function() {
 });
 ```
 
-##### Original question can be found at [DigitalOcean](https://www.digitalocean.com/community/questions/two-different-node-apps-with-two-different-domains-in-one-droplet).
+###### Original question can be found at [DigitalOcean](https://www.digitalocean.com/community/questions/two-different-node-apps-with-two-different-domains-in-one-droplet).
 ---
 
-##### License
+#### License
 MIT License. [Click here for more information.](LICENSE.md)
+
+---
