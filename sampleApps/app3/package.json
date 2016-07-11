@@ -1,0 +1,14 @@
+{
+  "name": "app3",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app3.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "KyoZeus",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.14.0"
+  }
+}
