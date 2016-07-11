@@ -4,6 +4,10 @@ A simple reverse proxy for hosting multiple apps on the same server.
 The proxy listens on port 80 and, depending on the domain provided,
 redirects the user to a specific port, where one Node app is listening.
 
+This implementation mantains apps independent between themselves, making it so one's bad behaviour won't influence the other.
+Apps can also be paused, restarted or updated in an independent form. Changes to the proxy server won't affect an app's behavior, as the app will still stay online even if the server is not.
+
+
 ### Usage
 * Install `nginx` on your server (examples using apt):
 
