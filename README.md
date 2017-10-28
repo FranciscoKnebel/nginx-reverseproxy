@@ -1,78 +1,64 @@
 # nginx-reverseproxy
 
 A simple reverse proxy for hosting multiple apps on the same server.
-The proxy listens on port 80 and, depending on the domain provided,
+The proxy listens on port 80 (or 443, if using the HTTP2 implementation) and, depending on the domain provided,
 redirects the user to a specific port, where one Node app is listening.
 
-This implementation mantains apps independent between themselves, making it so one's bad behaviour won't influence the other.
-Apps can also be paused, restarted or updated in an independent form. Changes to the proxy server won't affect an app's behavior, as the app will still stay online even if the server is not.
+This implementation mantains applications independent between themselves, making it so one's bad behaviour won't influence the other.
+Apps can also be paused, restarted or updated in an independent form. Changes to the proxy server won't affect the application behavior, as it will still stay online even if the server is not reachable.
 
 
 ### Usage
-* Install `nginx` on your server (examples using apt):
-
+1. Install `nginx` on your server (examples using apt):
 ```
   sudo apt-get install nginx
 ```
 
-* Edit the `default` server block configuration file:
-
+2. Edit the `default` server block configuration file:
 ```
   sudo nano /etc/nginx/sites-available/default
 ```
 
-* Delete everything on the file, and include your new proxy server:
+3. Delete everything on the file, and include your new proxy server:
+  - If you want the regular HTTP, copy the file `nginx/default`.
+  - Otherwise, if you want the HTTP2 version _(recommended)_, use the file `nginx/default-http2`. Please view the tutorial to setup HTTPS in the `Setting up HTTPS` section, as it is needed to run HTTP2.
+
+  This example creates proxies for three apps, each running on a different domain (check the value of `server_name` in each server block), and each running on a different proxy_pass port, where your app will be running.
+
+  **Make sure each app runs on the same port as the one you choose on the proxy_pass.**
+
+4. Once you are sure your apps are running on the correct ports, restart the `nginx` service and it should be working as expected:
 
 ```
-server {
-    listen 80;
-
-    server_name example1.com;
-
-    location / {
-        proxy_pass http://localhost:8001;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host $host;
-        proxy_cache_bypass $http_upgrade;
-    }
-}
-
-server {
-    listen 80;
-
-    server_name example2.com;
-    location / {
-        proxy_pass http://localhost:8002;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host $host;
-        proxy_cache_bypass $http_upgrade;
-    }   
-}
-
-server {
-    listen 80;
-
-    server_name example3.com;
-    location / {
-        proxy_pass http://localhost:8003;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host $host;
-        proxy_cache_bypass $http_upgrade;
-    }   
-}
-
+sudo service nginx restart
 ```
-This creates proxies for three apps, each running on a different domain (`server_name`),
-and each has a different proxy_pass port, where you app will be running. Make sure each app runs on the same port as the one you choose on the proxy_pass.
 
-* Once you are sure your apps are running on the correct ports, restart the `nginx` service and it should be working as expected:
+### Setting up HTTPS
 
+1. Generate your `dhparam.pem` file, running in the terminal
+```
+openssl dhparam -out /etc/nginx/ssl/dhparam.pem 2048
+```
+#### Create a SSL certificate using Let's Encrypt
+How to create a certificate, complete guide.
+https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-ubuntu-16-04
+
+1. Pause Nginx:
+```
+sudo service nginx stop
+```
+
+2. Install Let's Encrypt:
+```
+sudo apt-get install letsencrypt
+```
+
+3. Create certificate for each site (regular domain and with www):
+```
+sudo letsencrypt certonly -a standalone -d example.com -d www.example.com
+```
+
+4. Restart Nginx and everything should be working:
 ```
 sudo service nginx restart
 ```
