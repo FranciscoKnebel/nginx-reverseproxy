@@ -63,6 +63,12 @@ sudo letsencrypt certonly -a standalone -d example.com -d www.example.com
 sudo service nginx restart
 ```
 
+To test your nginx configuration, you can use the following:
+```
+nginx -t
+```
+This wil check your configuration for correct syntax and then try to open files referred in configuration.
+
 ---
 ###### Extra
 * To make it so the user can't access your app ports directly (example1.com:8001), you need to add a `hostname` to your `app.listen` instruction. That way, the proxy will be the only one who can access those ports, so it can redirect to the user.
