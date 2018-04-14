@@ -40,27 +40,50 @@ sudo service nginx restart
 openssl dhparam -out /etc/nginx/ssl/dhparam.pem 2048
 ```
 #### Create a SSL certificate using Let's Encrypt
-How to create a certificate, complete guide.
-https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-ubuntu-16-04
+~~How to create a certificate, complete guide.~~
+
+~~https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-ubuntu-16-04~~
+
+Using Certbot is easier and simpler to configure https://certbot.eff.org/lets-encrypt/ubuntutzesty-nginx.
 
 1. Pause Nginx:
 ```
 sudo service nginx stop
 ```
 
-2. Install Let's Encrypt:
+2. Install Certbot
 ```
-sudo apt-get install letsencrypt
+sudo apt-get update
+sudo apt-get install software-properties-common
+sudo add-apt-repository ppa:certbot/certbot
+sudo apt-get update
+sudo apt-get install python-certbot-nginx 
 ```
 
 3. Create certificate for each site (regular domain and with www):
 ```
-sudo letsencrypt certonly -a standalone -d example.com -d www.example.com
+sudo certbot --nginx
 ```
 
-4. Restart Nginx and everything should be working:
+4. Follow the steps on the screen. Certbot is a smart bot :)
+
+5. Restart Nginx and everything should be working:
 ```
 sudo service nginx restart
+```
+
+6.1 To renew the certificates manually
+```
+sudo certbot renew --dry-run
+```
+6.2 To renew automatically
+```
+sudo crontab -e
+
+Insert the next two lines.
+
+30 2 * * 1 /usr/bin/certbot renew --dry-run
+35 2 * * 1 /bin/systemctl reload nginx
 ```
 
 To test your nginx configuration, you can use the following:
@@ -78,6 +101,8 @@ var listener = app.listen(port, 'localhost', function() {
     console.log("Listening on port " + listener.address().port);
 });
 ```
+
+* https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-16-04
 
 ###### Original question can be found at [DigitalOcean](https://www.digitalocean.com/community/questions/two-different-node-apps-with-two-different-domains-in-one-droplet).
 ---
