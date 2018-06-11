@@ -44,7 +44,7 @@ openssl dhparam -out /etc/nginx/ssl/dhparam.pem 2048
 
 ~~https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-ubuntu-16-04~~
 
-Using Certbot is easier and simpler to configure https://certbot.eff.org/lets-encrypt/ubuntutzesty-nginx.
+Using [Certbot](https://certbot.eff.org/) is easier and simpler to configure https://certbot.eff.org/lets-encrypt/ubuntuartful-nginx.
 
 1. Pause Nginx:
 ```
