@@ -88,7 +88,7 @@ Insert the next two lines.
 
 To test your nginx configuration, you can use the following:
 ```
-nginx -t
+sudo nginx -t
 ```
 This wil check your configuration for correct syntax and then try to open files referred in configuration.
 
